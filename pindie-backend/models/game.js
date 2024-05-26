@@ -1,15 +1,15 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const userModel = require("./user");
+const categoryModel = require("./category");
 
 const gameSchema = new mongoose.Schema({
   title: {
-      // Поле со строковым значением
     type: String,
-    // Явно указываем, что поле обязательно при записи в базу нового документа
-    required: true,
+    required: true
   },
   description: {
     type: String,
-    required: true,
+    required: true
   },
   developer: {
     type: String,
@@ -22,7 +22,35 @@ const gameSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true
-  }
+  },
+  users: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: userModel 
+    }
+  ],
+  categories: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: categoryModel 
+    }
+  ]
 });
 
-module.exports = mongoose.model('game', gameSchema);
+
+gameSchema.statics.findGameByCategory = function(category) {
+  return this.find({})
+    .populate({
+      path: "categories",
+      match: { name: category } 
+    })
+    .populate({
+      path: "users",
+      select: "-password"
+    })
+    .then(games => {
+      return games.filter(game => game.categories.length > 0);
+    });
+};
+
+module.exports = mongoose.model("game", gameSchema);
