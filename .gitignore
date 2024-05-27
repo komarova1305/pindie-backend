@@ -1,4 +1,9 @@
+node_modules
+.Ds_Store
+.vscode
 
-.gitattributes
-.DS_Store
-.DS_Store
+# ssh student@158.160.170.119 -i ./student_key 
+# cd pindie-backend
+# http://158.160.170.119:3001/
+
+# sudo ln -s /etc/nginx/sites-available/backend /etc/nginx/sites-enabled/backend
